@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-#This is a test
 import os
 import sys
 
