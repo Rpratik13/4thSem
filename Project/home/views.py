@@ -7,8 +7,11 @@ def index(request):
 
 def question_list(request,id=None):
 	question_list = Question.objects.all()
-	content = {
-		"question_list":question_list
+	answer_list   = Answer.objects.all()
+	content       = {
+		"question_list":question_list,
+		"answer_list":answer_list
 	}
 
-	return render(request,"question_list.html",content)
+
+	return render(request,"home/question_list.html",content)

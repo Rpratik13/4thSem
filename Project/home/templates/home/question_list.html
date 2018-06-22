@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<!--ClassName.objects.get(upvotes)--> 
+	{%for i in question_list%}
+		<b>{{i.question}}</b><br><br>		
+		{%for j in answer_list%}
+			{%if i.id == j.question_id%}
+				{{j.answer}}<br><br>
+			{%endif%}
+		{%endfor%}<hr><br>
+	{%endfor%}
+</body>
+</html>
