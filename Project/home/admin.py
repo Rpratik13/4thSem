@@ -1,5 +1,5 @@
 from django.contrib import admin
-#from .models import index
+from .models import Question,Answer
 
-#admin.site.register(ClassName)
-# Register your models here.
+admin.site.register(Question)
+admin.site.register(Answer)
