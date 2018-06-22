@@ -1,5 +1,7 @@
 from django.contrib import admin
-#from .models import index
+from .models import Form 
 
-#admin.site.register(ClassName)
+admin.site.register(Form)
+
+
 # Register your models here.
