@@ -5,13 +5,25 @@
 </head>
 <body>
 	<!--ClassName.objects.get(upvotes)--> 
+	{%include 'navbar.html'%}
 	{%for i in question_list%}
-		<b>{{i.question}}</b><br><br>		
+		<b>{{i.question}}</b>
+		<form method="POST">
+			{% csrf_token %}
+    		{{ form.as_p }}
+    		<input id="submit" type="submit" value="Up" name="up" />
+    		<input id="submit" type="submit" value="Down" name="down" />
+
+		</form>
+			{{text}}
+		<br><br>		
+		
 		{%for j in answer_list%}
 			{%if i.id == j.question_id%}
 				{{j.answer}}<br><br>
 			{%endif%}
 		{%endfor%}<hr><br>
+
 	{%endfor%}
 </body>
 </html>
