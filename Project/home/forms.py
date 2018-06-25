@@ -1,4 +1,13 @@
 from django import forms
+from .models import Question
 
-class HomeForm(forms.Form):
-	post = Forms.SubmitButtonField(label="", initial="Up")
+
+class QuestionForm(forms.ModelForm):
+
+    class Meta:
+        model = Question
+        fields = ['question']
+        widgets = {
+            'question': forms.Textarea(attrs={"class":"form-control", "rows": 5, "cols": 20})
+        }
+

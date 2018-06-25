@@ -1,21 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-</head>
-<body>
+{% extends 'base.html' %}
 	<!--ClassName.objects.get(upvotes)--> 
-	{%include 'navbar.html'%}
+	{% block content %}
+	<a href="{%url 'add_question' %}">Add</a>
 	{%for i in question_list%}
-		<b>{{i.question}}</b>
-		<form method="POST">
-			{% csrf_token %}
-    		{{ form.as_p }}
-    		<input id="submit" type="submit" value="Up" name="up" />
-    		<input id="submit" type="submit" value="Down" name="down" />
-
-		</form>
-			{{text}}
+		<b><a href="{%url 'question_detail' i.id %}">{{i}}</a></b>
 		<br><br>		
 		
 		{%for j in answer_list%}
@@ -25,5 +13,4 @@
 		{%endfor%}<hr><br>
 
 	{%endfor%}
-</body>
-</html>
+{% endblock %}
