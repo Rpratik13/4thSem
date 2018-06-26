@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+	{% for questions in question %}
+		<b>{{questions.question}}</b><br><br>
+		<form action = "{% url 'upvote' questions.id%}" method="POST">
+			{% csrf_token %}
+    		{{ form.as_p }}
+    		<input id="submit" type="submit" value="Up" name="up" />
+		</form>
+		<form action = "{% url 'downvote' questions.id%}" method="POST">
+			{% csrf_token %}
+    		{{ form.as_p }}
+    		<input id="submit" type="submit" value="Down" name="down" />
+		</form>
+		
+			{% for j in answer_list %}
+					{{j.answer}}<br><br>
+			{%endfor%}<hr><br>
+	{% endfor %}
+{% endblock %}
