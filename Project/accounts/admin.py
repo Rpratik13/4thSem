@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Form 
+from .models import UserProfile
 
-admin.site.register(Form)
+admin.site.register(UserProfile)
 
 
 # Register your models here.
