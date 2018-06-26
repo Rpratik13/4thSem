@@ -4,7 +4,7 @@ from django.urls import path
 urlpatterns = [
    	#path('',views.index),
     path('',views.question_list,name='question_list'),
-    path('/question/<int:question_id>/<int:answer_id>',views.answer_detail,name='answer_votes'),
+    path('question/<int:question_id>/<int:answer_id>',views.answer_detail,name='answer_votes'),
     path('question/<int:question_id>',views.question_detail, name='question_detail'),
     path('question/<int:question_id>/upvote',views.question_upvote, name='question_upvote'),
     path('question/<int:question_id>/downvote',views.question_downvote, name='question_downvote'),
