@@ -35,6 +35,11 @@ def question_list(request,id=None):
 
 def question_detail(request, question_id):
 	question           = Question.objects.filter(id = question_id)
+	answers            = AnswerVote.objects.filter()
+	answer_upvotes     = answers.filter(vote=1).count()
+	answer_downvotes   = answers.filter(vote=-1).count()
+	answer_votes = answer_upvotes - answer_downvotes
+	
 	answer_list        = Answer.objects.filter(question_id = question_id)
 	question_upvotes   = QuestionVote.objects.filter(question_id=question_id,vote=1).count()
 	question_downvotes = QuestionVote.objects.filter(question_id=question_id,vote=-1).count()
@@ -56,15 +61,7 @@ def question_detail(request, question_id):
 		}
 		return render(request, 'home/question_detail.html', context)
   
-def answer_detail(request,question_id,answer_id):
-	answers            = AnswerVote.objects.filter(answer_id = answer_id)
-	answer_upvotes     = answers.filter(vote=1).count()
-	answer_downvotes   = answers.filter(vote=-1).count()
-	answer_votes = answer_upvotes - answer_downvotes
-	content = {
-	"answer_votes":answer_votes
-	}
-	return render(request,"home/question_detail.html",content)
+# def answer_detail(request,question_id,answer_id):
 	
 def question_upvote(request,question_id):
 	question = Question.objects.filter(id=question_id)
@@ -133,5 +130,15 @@ def add_question(request):
 		form = QuestionForm()
 		context = {'form': form}
 		return render(request, 'home/add_question.html', context)
+
+def tag_filter(request,tag):
+	question_list = Question.objects.filter(tag=tag)
+	answer_list   = Answer.objects.filter()
+	content       = {
+		"question_list":question_list,
+		"answer_list":answer_list
+	}
+
+	return render(request,"home/question_list.html",content)
 
 	
