@@ -24,4 +24,14 @@ class QuestionVote(models.Model):
 class AnswerVote(models.Model):
 	answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
 	vote   = models.IntegerField(default=0)
-
+	
+	def get_results_dict(self,answer_id):
+		res = []
+		for choice in self.choice_set.all():
+			d = {}
+			answer_upvotes = choice.vote.filter(answer_id=answer_id,vote=1).count()
+			answer_downvotes = choice.vote.filter(answer_id=answer_id,vote=1).count()
+			votes = answer_upvotes - answer_downvotes
+			d['votes'] = votes
+			res.append(d)
+		return res

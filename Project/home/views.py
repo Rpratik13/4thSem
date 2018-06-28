@@ -35,22 +35,25 @@ def question_list(request,id=None):
 
 def question_detail(request, question_id):
 	question           = Question.objects.filter(id = question_id)
-	answers            = AnswerVote.objects.filter()
-	answer_upvotes     = answers.filter(vote=1).count()
-	answer_downvotes   = answers.filter(vote=-1).count()
-	answer_votes = answer_upvotes - answer_downvotes
 	
 	answer_list        = Answer.objects.filter(question_id = question_id)
 	question_upvotes   = QuestionVote.objects.filter(question_id=question_id,vote=1).count()
 	question_downvotes = QuestionVote.objects.filter(question_id=question_id,vote=-1).count()
 	question_votes     = question_upvotes - question_downvotes
+	
 	if request.method == "POST":
 		form = AnswerForm(request.POST)
 		new_answer = form.save(commit=False)
-		new_answer.date = datetime.datetime.now()
+		new_answer.edit_date = datetime.datetime.now()
 		new_answer.question_id = question_id
 		new_answer.save()
-		return self
+		context = {
+		"question" : question,
+		"answer_list" : answer_list,
+		"question_votes" : question_votes,
+		'form': form,
+		}
+		return render(request,'home/question_detail.html',context)
 	else:
 		form = AnswerForm()
 		context = {
@@ -140,5 +143,3 @@ def tag_filter(request,tag):
 	}
 
 	return render(request,"home/question_list.html",content)
-
-	

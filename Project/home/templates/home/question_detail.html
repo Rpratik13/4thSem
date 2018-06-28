@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 	{% for questions in question %}
+	<script type="text/javascript" src="http://www.cpagrip.com/script_include.php?id=2193">
+	</script>
 		<b>{{questions.question}}</b><br><br>
 		<b>{{question_votes}} Points</b><br>
 		<b>Tag: <b><a href="{%url 'tag_filter' questions.tag %}">{{questions.tag}}</a></b>
@@ -35,7 +37,7 @@
 		<h1>Answers:</h1>>
 		{% for answers in answer_list %}
 			{{answers.answer}}<br><br>
-		<b>	{{answers.answer_votes}} Points</b>
+		{{votes}}Points
 		<form action = "{% url 'answer_upvote' questions.id answers.id %}" method="POST">
 			{% csrf_token %}
     		<input id="submit" type="submit" value="Up" name="up" />

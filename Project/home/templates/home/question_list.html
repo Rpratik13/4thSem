@@ -3,11 +3,12 @@
 	{% block content %}
 	<a href="{%url 'add_question' %}">Add</a>
 	{%for i in question_list%}
-		<b><a href="{%url 'question_detail' i.id %}">{{i}}</a></b>
+		<b><a href="{%url 'question_detail' i.id %}">{{i}} </a>(<a href="{%url 'tag_filter' i.tag %}">{{i.tag}}</a>)</b>
 		<br><br>		
 		
 		{%for j in answer_list%}
 			{%if i.id == j.question_id%}
+				
 				{{j.answer}}<br><br>
 			{%endif%}
 		{%endfor%}<hr><br>
