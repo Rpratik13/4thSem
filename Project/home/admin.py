@@ -7,7 +7,7 @@ class QuestionAdmin(admin.ModelAdmin):
 	search_fields = ['question']
 	
 class AnswerAdmin(admin.ModelAdmin):
-	list_display  = ['answer','edit_date']
+	list_display  = ['answer','edit_date','votes']
 	list_filter   = ['edit_date']
 	search_fields = ['answer']
 

@@ -10,5 +10,6 @@ urlpatterns = [
     path('question/<int:question_id>/answer_upvote/<int:answer_id>',views.answer_upvote, name='answer_upvote'),
     path('question/<int:question_id>/answer_downvote/<int:answer_id>',views.answer_downvote, name='answer_downvote'),
     path('question/add',views.add_question, name='add_question'),
- 	path('question/tag/<str:tag>',views.tag_filter, name='tag_filter'), 
+ 	path('question/tag/<str:tag>',views.tag_filter, name='tag_filter'),
+ 	path('question/<int:question_id>/<int:answer_id>',views.edit_answer, name='edit_answer'), 
 ]
