@@ -2,7 +2,7 @@
 {% load static %}
 <h1><a href="{% url 'articles:list' %}"><img src="{% static 'logo.png' %}" alt="djangonautic" /></a></h1>
 {% block content %}
-<h1><a href="{% url 'articles:list' %}">Blog Lists</h1>
+<h1><a href="{% url 'articles:list' %}">Blog Lists</a></h1>
 <div class="article-detail">
     <div class="article">
         <img src="{{ article.thumb.url }}">

@@ -5,6 +5,22 @@
 
 <head>
   <title>Home</title>
+<<<<<<< HEAD
+  {% block custom_css %}{% endblock %}
+</head>
+ <body>
+  <ul>
+    <li>
+      <form action="{%url 'log-out' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">LOGOUT</button>
+      </form>
+  </ul>
+
+  {% block content %}
+  {% endblock %}
+  
+=======
 
 <!--   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -25,6 +41,7 @@
   
 
 
+>>>>>>> af1f48544a6a606d5c1c2f8e1f33f9c0403e80ff
 </body>
 
 </html>

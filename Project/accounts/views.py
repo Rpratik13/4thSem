@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 
 def index(request):
-    	return HttpResponse('you are at index')
+	return render(request, 'accounts/index.html')
 # Create your views here.
 def sign_up(request):
 	if request.method=='POST':
@@ -30,3 +30,10 @@ def log_in(request):
 		form=AuthenticationForm()
 
 	return render(request, 'accounts/log_in.html',{'form':form})
+
+def log_out(request):
+	if request.method == 'POST':
+		logout(request)
+		return redirect('index')
+	else:
+		return HttpResponse("log in first")
