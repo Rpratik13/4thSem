@@ -26,11 +26,9 @@ def index(request):
 def question_list(request,id=None):
 	question_list = Question.objects.all()
 	answer_list   = Answer.objects.all()
-	vote          = AnswerVote.objects.all()
 	content       = {
 		"question_list":question_list,
 		"answer_list":answer_list,
-		"vote":vote,
 	}
 
 	return render(request,"home/question_list.html",content)
@@ -55,6 +53,7 @@ def question_detail(request, question_id):
 		"answer_list" : answer_list,
 		"question_votes" : question_votes,
 		'form': form,
+		'edit_mode':False,
 		}
 		return render(request,'home/question_detail.html',context)
 	else:
@@ -64,6 +63,7 @@ def question_detail(request, question_id):
 		"answer_list" : answer_list,
 		"question_votes" : question_votes,
 		'form': form,
+
 		}
 		return render(request, 'home/question_detail.html', context)
   
@@ -169,21 +169,51 @@ def tag_filter(request,tag):
 
 def edit_answer(request,question_id,answer_id):
 
-	form   = AnswerForm()
+	answer = get_object_or_404(Answer, id=answer_id)
+   
+	if request.method == "POST":
+		form = AnswerForm(request.POST, instance=answer)
+		if form.is_valid():
+			new_answer = form.save()
+			new_answer.edit_date = datetime.datetime.now()
+			new_answer.save()
+			question           = Question.objects.filter(id = question_id)
 	
-	question           = Question.objects.filter(id = question_id)
+			answer_list        = Answer.objects.filter(question_id = question_id).order_by('edit_date').reverse()
+			question_upvotes   = QuestionVote.objects.filter(question_id=question_id,vote=1).count()
+			question_downvotes = QuestionVote.objects.filter(question_id=question_id,vote=-1).count()
+			question_votes     = question_upvotes - question_downvotes
+			required_ans       = Answer.objects.filter(id=answer_id)
+		
+			context = {
+			"question" : question,
+			"answer_list" : answer_list,
+			"question_votes" : question_votes,
+			'required_ans':required_ans,
+		
+			'form': form,
+			}
+		return render(request,'home/question_detail.html',context)
 	
-	answer_list        = Answer.objects.filter(question_id = question_id).order_by('edit_date').reverse()
-	question_upvotes   = QuestionVote.objects.filter(question_id=question_id,vote=1).count()
-	question_downvotes = QuestionVote.objects.filter(question_id=question_id,vote=-1).count()
-	question_votes     = question_upvotes - question_downvotes
+            
+	else:
+		form = AnswerForm(instance=answer)
+		question           = Question.objects.filter(id = question_id)
 	
-	content = {
-	"question" : question,
-	"answer_list" : answer_list,
-	"question_votes" : question_votes,
-	"form": form,
-	}
-
-	return render(request,"home/question_detail.html",content)
-
+		answer_list        = Answer.objects.filter(question_id = question_id).order_by('edit_date').reverse()
+		question_upvotes   = QuestionVote.objects.filter(question_id=question_id,vote=1).count()
+		question_downvotes = QuestionVote.objects.filter(question_id=question_id,vote=-1).count()
+		question_votes     = question_upvotes - question_downvotes
+		required_ans       = Answer.objects.filter(id=answer_id)
+		
+		context = {
+		"question" : question,
+		"answer_list" : answer_list,
+		"question_votes" : question_votes,
+		'form': form,
+		'required_ans':required_ans,
+			
+		'edit_mode':True,
+		}
+	return render(request,'home/question_detail.html',context)
+    

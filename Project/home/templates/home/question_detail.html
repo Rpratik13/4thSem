@@ -20,8 +20,16 @@
 		<div class="container">
 		  <div class="row">
 		    <div class="col-sm-6 offset-sm-3">
-		      <form method="POST" action="{% url  'question_detail' questions.id %}">
-		        {% csrf_token %}
+		    	{% if edit_mode %}
+       				{%for id in required_ans%}
+       	 			<form method="POST" action="{% url  'edit_answer' questions.id id.id %}">
+		    		{%endfor%}
+    			{% else %}
+		      	<form method="POST" action="{% url  'question_detail' questions.id %}">
+		      
+       
+     			{% endif %}
+      	        {% csrf_token %}
 		        {% for field in form %}
 		        <div class="form-group">
 		          {{ field.errors }}
@@ -35,7 +43,7 @@
 		  </div>
 		</div>
 
-		<h1>Answers:</h1>>
+		<h1>Answers:</h1>
 		{% for answers in answer_list %}
 			{{answers.answer}}<br><br>
 		{{answers.votes}} Points
