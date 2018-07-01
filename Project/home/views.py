@@ -26,9 +26,11 @@ def index(request):
 def question_list(request,id=None):
 	question_list = Question.objects.all()
 	answer_list   = Answer.objects.all()
+	vote          = AnswerVote.objects.all()
 	content       = {
 		"question_list":question_list,
-		"answer_list":answer_list
+		"answer_list":answer_list,
+		"vote":vote,
 	}
 
 	return render(request,"home/question_list.html",content)
@@ -36,7 +38,7 @@ def question_list(request,id=None):
 def question_detail(request, question_id):
 	question           = Question.objects.filter(id = question_id)
 	
-	answer_list        = Answer.objects.filter(question_id = question_id)
+	answer_list        = Answer.objects.filter(question_id = question_id).order_by('edit_date').reverse()
 	question_upvotes   = QuestionVote.objects.filter(question_id=question_id,vote=1).count()
 	question_downvotes = QuestionVote.objects.filter(question_id=question_id,vote=-1).count()
 	question_votes     = question_upvotes - question_downvotes
@@ -47,6 +49,7 @@ def question_detail(request, question_id):
 		new_answer.edit_date = datetime.datetime.now()
 		new_answer.question_id = question_id
 		new_answer.save()
+		answer_list        = Answer.objects.filter(question_id = question_id).order_by('edit_date').reverse()
 		context = {
 		"question" : question,
 		"answer_list" : answer_list,
@@ -101,11 +104,22 @@ def answer_upvote(request,answer_id,question_id):
 	
 	if votes.filter(answer_id = answer_id,vote=1).exists():
 		votes.delete()
+		answerx = Answer.objects.get(id=answer_id)
+		answerx.votes -=1
+		answerx.save() 
 	elif votes.filter(answer_id=answer_id,vote=-1):
 		AnswerVote.objects.filter(answer_id=answer_id,vote=-1).delete()
+		Answer.objects.filter(id=answer_id)
+		answerx = Answer.objects.get(id=answer_id)
+		answerx.votes +=2
+		answerx.save()
 		new_vote.save()	
 	else:
-		new_vote.save()	
+		new_vote.save()
+		Answer.objects.get(id=answer_id)
+		answerx = Answer.objects.get(id=answer_id)
+		answerx.votes +=1
+		answerx.save()	
 	return redirect('question_detail', question_id=question_id)
 
 def answer_downvote(request,answer_id,question_id):
@@ -115,11 +129,20 @@ def answer_downvote(request,answer_id,question_id):
 	
 	if votes.filter(answer_id = answer_id,vote=-1).exists():
 		votes.delete()
+		answerx = Answer.objects.get(id=answer_id)
+		answerx.votes +=1
+		answerx.save()
 	elif votes.filter(answer_id=answer_id,vote=1):
 		AnswerVote.objects.filter(answer_id=answer_id,vote=1).delete()
-		new_vote.save()	
+		new_vote.save()
+		answerx = Answer.objects.get(id=answer_id)
+		answerx.votes -=2
+		answerx.save()	
 	else:
 		new_vote.save()	
+		answerx = Answer.objects.get(id=answer_id)
+		answerx.votes -=1
+		answerx.save()
 	return redirect('question_detail', question_id=question_id)
 
 def add_question(request):
@@ -143,3 +166,24 @@ def tag_filter(request,tag):
 	}
 
 	return render(request,"home/question_list.html",content)
+
+def edit_answer(request,question_id,answer_id):
+
+	form   = AnswerForm()
+	
+	question           = Question.objects.filter(id = question_id)
+	
+	answer_list        = Answer.objects.filter(question_id = question_id).order_by('edit_date').reverse()
+	question_upvotes   = QuestionVote.objects.filter(question_id=question_id,vote=1).count()
+	question_downvotes = QuestionVote.objects.filter(question_id=question_id,vote=-1).count()
+	question_votes     = question_upvotes - question_downvotes
+	
+	content = {
+	"question" : question,
+	"answer_list" : answer_list,
+	"question_votes" : question_votes,
+	"form": form,
+	}
+
+	return render(request,"home/question_detail.html",content)
+

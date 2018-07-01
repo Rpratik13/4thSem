@@ -5,6 +5,7 @@
 	</script>
 		<b>{{questions.question}}</b><br><br>
 		<b>{{question_votes}} Points</b><br>
+		<b>{{questions.date}}</b>
 		<b>Tag: <b><a href="{%url 'tag_filter' questions.tag %}">{{questions.tag}}</a></b>
 		<form action = "{% url 'question_upvote' questions.id%}" method="POST">
 			{% csrf_token %}
@@ -37,7 +38,8 @@
 		<h1>Answers:</h1>>
 		{% for answers in answer_list %}
 			{{answers.answer}}<br><br>
-		{{votes}}Points
+		{{answers.votes}} Points
+		<a href = "{%url 'edit_answer' questions.id answers.id%}">Edit</a>
 		<form action = "{% url 'answer_upvote' questions.id answers.id %}" method="POST">
 			{% csrf_token %}
     		<input id="submit" type="submit" value="Up" name="up" />
