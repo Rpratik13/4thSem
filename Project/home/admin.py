@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Question,Answer,QuestionVote,AnswerVote
 
 class QuestionAdmin(admin.ModelAdmin):
-	list_display  = ['question','date','tag']
+	list_display  = ['question','date','tag','votes']
 	list_filter   = ['date']
 	search_fields = ['question']
 	

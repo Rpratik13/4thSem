@@ -1,14 +1,26 @@
 {% extends 'base.html' %}
 	<!--ClassName.objects.get(upvotes)--> 
 	{% block content %}
-	<a href="{%url 'add_question' %}">Add</a>
+	
+	<a href="{%url 'add_question' %}">Add</a><br><br>
+	<form class="form-inline my-2 my-lg-1">
+        <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            name='search'
+            value="{{search_term}}">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button><br><br>
+      </form>
 	{%for i in question_list%}
 		<b><a href="{%url 'question_detail' i.id %}">{{i}} </a>(<a href="{%url 'tag_filter' i.tag %}">{{i.tag}}</a>)</b>
 		<br><br>
 
-		{%for j in answer_list%}
+		{%for j in answer_list|slice:":1"%}
 			{%if i.id == j.question_id%}				
 				{{j.answer}}
+			
 				<br><br>
 			{%endif%}	
 

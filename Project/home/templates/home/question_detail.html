@@ -1,20 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
 	{% for questions in question %}
+	
+
 	<script type="text/javascript" src="http://www.cpagrip.com/script_include.php?id=2193">
 	</script>
 		<b>{{questions.question}}</b><br><br>
 		<b>{{question_votes}} Points</b><br>
 		<b>{{questions.date}}</b>
 		<b>Tag: <b><a href="{%url 'tag_filter' questions.tag %}">{{questions.tag}}</a></b>
+		
 		<form action = "{% url 'question_upvote' questions.id%}" method="POST">
 			{% csrf_token %}
     		<input id="submit" type="submit" value="Up" name="up" />
 		</form>
+		
 		<form action = "{% url 'question_downvote' questions.id%}" method="POST">
 			{% csrf_token %}
     		<input id="submit" type="submit" value="Down" name="down" />
 		</form>
+		
 		<br><br>
 
 		<div class="container">
@@ -22,20 +27,19 @@
 		    <div class="col-sm-6 offset-sm-3">
 		    	{% if edit_mode %}
        				{%for id in required_ans%}
-       	 			<form method="POST" action="{% url  'edit_answer' questions.id id.id %}">
+       		 			<form method="POST" action="{% url  'edit_answer' questions.id id.id %}">
 		    		{%endfor%}
     			{% else %}
-		      	<form method="POST" action="{% url  'question_detail' questions.id %}">
-		      
-       
+		    		<form method="POST" action="{% url  'question_detail' questions.id %}">
+		     
      			{% endif %}
       	        {% csrf_token %}
 		        {% for field in form %}
-		        <div class="form-group">
-		          {{ field.errors }}
-		          {{ field.label_tag }}
-		          {{ field }}
-		        </div>
+			        <div class="form-group">
+			          {{ field.errors }}
+			          {{ field.label_tag }}
+			          {{ field }}
+			        </div>
 		        {% endfor %}
 		        <input type="submit" value="submit" class='btn btn-primary'>
 		      </form>
@@ -46,7 +50,8 @@
 		<h1>Answers:</h1>
 		{% for answers in answer_list %}
 			{{answers.answer}}<br><br>
-		{{answers.votes}} Points
+		{{answers.votes}} Points<br>
+		{{answers.edit_date}} <br>
 		<a href = "{%url 'edit_answer' questions.id answers.id%}">Edit</a>
 		<form action = "{% url 'answer_upvote' questions.id answers.id %}" method="POST">
 			{% csrf_token %}
